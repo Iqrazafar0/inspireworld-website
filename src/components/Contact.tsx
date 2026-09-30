@@ -1,12 +1,14 @@
+import Link from "next/link";
 import { company, links, addressLines } from "@/content/site";
-import { SectionHead } from "./SectionHead";
 import { Icon } from "./Icon";
 
-export function Contact() {
+export function ContactCards() {
   return (
-    <section id="contact" className="section contact" aria-labelledby="contact-title">
+    <section className="section contact" aria-labelledby="contact-title">
       <div className="container">
-        <SectionHead id="contact-title" index="06" eyebrow="Contact" title="Visit or call our Al Garhoud office." />
+        <h2 id="contact-title" className="sr-only">
+          Contact details
+        </h2>
         <div className="contact__grid">
           <address className="contact__card reveal">
             <p className="contact__label">
@@ -48,9 +50,9 @@ export function Contact() {
             <p className="contact__muted">
               {company.owner}, {company.ownerRole}
             </p>
-            <a href="#enquiry" className="text-link">
-              Or use the enquiry form <Icon name="arrow" size={16} />
-            </a>
+            <Link href="/terms" className="text-link">
+              Our trade terms <Icon name="arrow" size={16} />
+            </Link>
           </div>
         </div>
       </div>

@@ -1,29 +1,32 @@
 import { company, links } from "@/content/site";
-import { SectionHead } from "./SectionHead";
 import { EnquiryForm } from "./EnquiryForm";
 import { Icon } from "./Icon";
+import Link from "next/link";
 
 export function Enquiry() {
   return (
     <section id="enquiry" className="section enquiry" aria-labelledby="enquiry-title">
       <div className="container enquiry__grid">
         <div className="enquiry__intro">
-          <SectionHead
-            id="enquiry-title"
-            index="05"
-            eyebrow="Request a quotation"
-            title="Tell us what you need."
-            intro="Share the product line, quantity and destination. We reply with pricing, availability and lead time."
-          />
+          <header className="section-head reveal">
+            <p className="eyebrow">
+              <span className="eyebrow__rule" aria-hidden="true" />
+              Request a quotation
+            </p>
+            <h2 id="enquiry-title">Tell us what you need.</h2>
+            <p className="section-head__intro">
+              Share the product line, quantity and delivery location. We reply by email or WhatsApp with prices, availability and lead time.
+            </p>
+          </header>
           <ul className="enquiry__points reveal">
             <li>
               <Icon name="check" size={18} /> One quotation can cover several product lines
             </li>
             <li>
-              <Icon name="check" size={18} /> Prices quoted in AED, with UAE VAT shown where it applies
+              <Icon name="check" size={18} /> Prices in AED, with VAT shown separately where it applies
             </li>
             <li>
-              <Icon name="check" size={18} /> Delivery in the UAE or handover to your freight forwarder
+              <Icon name="check" size={18} /> Orders are governed by our <Link href="/terms">Terms &amp; Conditions</Link>
             </li>
           </ul>
           <div className="enquiry__direct reveal">

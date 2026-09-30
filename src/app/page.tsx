@@ -1,33 +1,44 @@
-import { TopBar } from "@/components/TopBar";
-import { Header } from "@/components/Header";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { lines } from "@/content/site";
 import { Hero } from "@/components/Hero";
-import { ProductLines } from "@/components/ProductLines";
-import { About } from "@/components/About";
+import { SectionHead } from "@/components/SectionHead";
+import { ProductGrid } from "@/components/ProductGrid";
+import { Seasons } from "@/components/Seasons";
+import { TermsGlance } from "@/components/TermsGlance";
 import { Process } from "@/components/Process";
 import { Supply } from "@/components/Supply";
-import { Enquiry } from "@/components/Enquiry";
-import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
-import { MobileActions } from "@/components/MobileActions";
-import { Reveal } from "@/components/Reveal";
+import { CtaBand } from "@/components/CtaBand";
+import { Icon } from "@/components/Icon";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
+  const featured = lines.filter((l) => l.featured);
   return (
     <>
-      <TopBar />
-      <Header />
-      <main id="main">
-        <Hero />
-        <ProductLines />
-        <About />
-        <Process />
-        <Supply />
-        <Enquiry />
-        <Contact />
-      </main>
-      <Footer />
-      <MobileActions />
-      <Reveal />
+      <Hero />
+      <section className="section lines" aria-labelledby="lines-title">
+        <div className="container">
+          <div className="lines__top">
+            <SectionHead
+              id="lines-title"
+              eyebrow="Main product lines"
+              title="What merchants order from us most."
+              intro="School and travel bags, gifts and garments make up most of our orders. Five more licensed lines are available on request."
+            />
+            <Link href="/products" className="btn btn--outline reveal">
+              All {lines.length} product lines <Icon name="arrow" size={18} />
+            </Link>
+          </div>
+          <ProductGrid items={featured} />
+        </div>
+      </section>
+      <Seasons />
+      <TermsGlance />
+      <Process />
+      <Supply />
+      <CtaBand />
     </>
   );
 }

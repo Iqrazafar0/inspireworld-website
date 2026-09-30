@@ -5,7 +5,7 @@ export function TopBar() {
   return (
     <div className="topbar">
       <div className="container topbar__inner">
-        <p className="topbar__note">Readymade garments, footwear &amp; lifestyle goods · Trade supply from Dubai</p>
+        <p className="topbar__note">School bags, luggage, gifts &amp; garments · Wholesale supply in Dubai</p>
         <ul className="topbar__contact">
           <li>
             <a href={links.mail}>

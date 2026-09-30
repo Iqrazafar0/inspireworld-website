@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { lines, company, links } from "@/content/site";
-import { SELECT_LINE_EVENT } from "@/lib/events";
 import { Icon } from "./Icon";
 
 type Status = "idle" | "sending" | "sent" | "unavailable" | "error";
@@ -30,7 +29,7 @@ function validate(data: Record<string, string>): Errors {
 }
 
 function whatsappSummary(d: Record<string, string>) {
-  const lineName = lines.find((l) => l.id === d.line)?.name ?? d.line;
+  const lineName = lines.find((l) => l.id === d.line)?.headline ?? "Several product lines";
   return [
     `Hello ${company.shortName}, I'd like a quotation.`,
     `Product line: ${lineName}`,
@@ -52,13 +51,10 @@ export function EnquiryForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
 
+  // Pre-select the product line when arriving from a "Request a quotation" link (?line=<id>).
   useEffect(() => {
-    const onSelect = (e: Event) => {
-      const id = (e as CustomEvent<string>).detail;
-      if (lines.some((l) => l.id === id)) setLine(id);
-    };
-    window.addEventListener(SELECT_LINE_EVENT, onSelect);
-    return () => window.removeEventListener(SELECT_LINE_EVENT, onSelect);
+    const id = new URLSearchParams(window.location.search).get("line");
+    if (id && lines.some((l) => l.id === id)) setLine(id);
   }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -152,7 +148,7 @@ export function EnquiryForm() {
             </option>
             {lines.map((l) => (
               <option key={l.id} value={l.id}>
-                {l.name}
+                {l.headline}
               </option>
             ))}
             <option value="multiple">Several lines (list them below)</option>
@@ -185,7 +181,7 @@ export function EnquiryForm() {
           <p>
             {status === "unavailable"
               ? "Online enquiries are being set up. Please send the same details on WhatsApp. We've written the message for you."
-              : "Your enquiry could not be sent just now. Please send it on WhatsApp or call us."}
+              : "Your enquiry could not be sent just now. Please send the same details on WhatsApp (we've written the message for you) or call us."}
           </p>
           <div className="form__notice-actions">
             <a className="btn btn--primary btn--sm" href={links.whatsapp(whatsappSummary(lastData))} target="_blank" rel="noopener noreferrer">

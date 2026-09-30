@@ -1,11 +1,14 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { nav, enquiryHref, company, links } from "@/content/site";
 import { Logo } from "./Logo";
 import { Icon } from "./Icon";
 
 export function Header() {
+  const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -16,6 +19,9 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => setOpen(false), [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -36,29 +42,32 @@ export function Header() {
     };
   }, [open]);
 
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
   const close = () => setOpen(false);
 
   return (
     <header className={`header${scrolled ? " header--scrolled" : ""}${open ? " header--open" : ""}`}>
       <div className="container header__inner">
-        <a href="#main" className="header__brand" aria-label={`${company.shortName}, back to top`} onClick={close}>
+        <Link href="/" className="header__brand" aria-label={`${company.shortName} home`} onClick={close}>
           <Logo />
-        </a>
+        </Link>
 
         <nav className="header__nav" aria-label="Main">
           <ul>
             {nav.map((item) => (
               <li key={item.href}>
-                <a href={item.href}>{item.label}</a>
+                <Link href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+                  {item.label}
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
 
         <div className="header__actions">
-          <a href={enquiryHref} className="btn btn--primary btn--sm header__cta">
+          <Link href={enquiryHref} className="btn btn--primary btn--sm header__cta">
             Request a quotation
-          </a>
+          </Link>
           <button
             ref={toggleRef}
             type="button"
@@ -78,18 +87,17 @@ export function Header() {
           <ul>
             {nav.map((item, i) => (
               <li key={item.href} style={{ "--i": i } as React.CSSProperties}>
-                <a href={item.href} onClick={close}>
-                  <span className="mono">0{i + 1}</span>
+                <Link href={item.href} onClick={close} aria-current={isActive(item.href) ? "page" : undefined}>
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
         <div className="mobile-menu__foot">
-          <a href={enquiryHref} className="btn btn--primary" onClick={close}>
+          <Link href={enquiryHref} className="btn btn--primary" onClick={close}>
             Request a quotation <Icon name="arrow" size={18} />
-          </a>
+          </Link>
           <a href={links.whatsapp()} className="btn btn--outline" target="_blank" rel="noopener noreferrer">
             <Icon name="whatsapp" size={18} /> WhatsApp {company.phoneDisplay}
           </a>
