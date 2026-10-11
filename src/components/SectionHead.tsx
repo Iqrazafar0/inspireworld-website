@@ -1,12 +1,10 @@
 export function SectionHead({
-  index,
   eyebrow,
   title,
   intro,
   id,
   tone = "dark",
 }: {
-  index: string;
   eyebrow: string;
   title: string;
   intro?: string;
@@ -16,7 +14,7 @@ export function SectionHead({
   return (
     <header className={`section-head section-head--${tone} reveal`}>
       <p className="eyebrow">
-        <span className="eyebrow__index">{index}</span>
+        <span className="eyebrow__rule" aria-hidden="true" />
         {eyebrow}
       </p>
       <h2 id={id}>{title}</h2>

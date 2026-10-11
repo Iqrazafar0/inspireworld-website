@@ -1,6 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
 import { company, lines, addressLine } from "@/content/site";
+import { TopBar } from "@/components/TopBar";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { MobileActions } from "@/components/MobileActions";
+import { Reveal } from "@/components/Reveal";
 import "./globals.css";
 
 const display = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600"], style: ["normal", "italic"], variable: "--font-display", display: "swap" });
@@ -8,40 +13,31 @@ const sans = Instrument_Sans({ subsets: ["latin"], weight: ["400", "500", "600"]
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-const lineNames = lines.map((l) => l.name);
-const description = `${company.legalName}: Dubai general trading company supplying ${lineNames
-  .slice(0, 3)
-  .join(", ")
-  .toLowerCase()}, bags, luggage, oud, gifts and personal care to retailers, wholesalers and importers. ${addressLine}.`;
+const description = `${company.legalName}, Dubai: wholesale supplier of school bags, backpacks, trolley bags, luggage, gift sets, occasion items and readymade garments to merchants and retailers. ${addressLine}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${company.shortName} | Readymade Garments & General Trading, Dubai`,
+    default: `${company.shortName} | School Bags, Luggage & Gifts Wholesale, Dubai`,
     template: `%s | ${company.shortName}`,
   },
   description,
   applicationName: company.shortName,
   keywords: [
+    "school bags wholesale Dubai",
+    "backpacks supplier UAE",
+    "trolley school bags Dubai",
+    "luggage wholesale Dubai",
+    "gift sets supplier Dubai",
+    "National Day gift items UAE",
     "readymade garments trading Dubai",
-    "garments wholesaler Dubai",
-    "textile trading UAE",
-    "shoes wholesale Dubai",
-    "sandals and slippers supplier UAE",
-    "handbags leather goods trading Dubai",
-    "luggage suitcases wholesale Dubai",
-    "oud agarwood incense trading",
-    "soap hair care products supplier UAE",
-    "gifts trading Dubai",
     "Al Garhoud trading company",
     company.shortName,
   ],
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    url: "/",
     siteName: company.shortName,
-    title: `${company.shortName}: garments, footwear and lifestyle goods traded from Dubai`,
+    title: `${company.shortName}: school bags, travel bags and gifts supplied to Dubai merchants`,
     description,
     locale: "en_AE",
     images: [{ url: "/images/og.jpg", width: 1200, height: 630, alt: `${company.legalName}, Dubai` }],
@@ -72,15 +68,12 @@ const jsonLd = {
     addressRegion: company.address.city,
     addressCountry: company.address.countryCode,
   },
-  areaServed: ["AE", "GCC", "Worldwide"],
+  areaServed: "AE",
   description,
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Product lines",
-    itemListElement: lineNames.map((name) => ({
-      "@type": "Offer",
-      itemOffered: { "@type": "Product", name },
-    })),
+    itemListElement: lines.map((l) => ({ "@type": "Offer", itemOffered: { "@type": "Product", name: l.name } })),
   },
 };
 
@@ -92,7 +85,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        {children}
+        <TopBar />
+        <Header />
+        <main id="main">{children}</main>
+        <Footer />
+        <MobileActions />
+        <Reveal />
       </body>
     </html>
   );

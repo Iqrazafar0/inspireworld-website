@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { links, enquiryHref } from "@/content/site";
 import { Icon } from "./Icon";
 
@@ -14,10 +15,10 @@ export function MobileActions() {
           <Icon name="whatsapp" size={20} />
           WhatsApp
         </a>
-        <a href={enquiryHref} className="mobile-actions__primary">
+        <Link href={enquiryHref} className="mobile-actions__primary">
           <Icon name="mail" size={20} />
           Quotation
-        </a>
+        </Link>
       </nav>
       <a href={links.whatsapp()} className="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
         <Icon name="whatsapp" size={26} />

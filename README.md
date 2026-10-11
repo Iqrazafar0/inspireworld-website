@@ -18,50 +18,55 @@ Requires Node.js 18.18 or newer (20 LTS recommended).
 1. Push this folder to a GitHub repository.
 2. In Vercel, click **Add New → Project**, import the repository and keep the defaults (Next.js is detected automatically).
 3. Under **Settings → Environment Variables**, add the variables from `.env.example`:
-   - `NEXT_PUBLIC_SITE_URL`: the live domain, for example `https://www.inspireworld.ae`
-   - `ENQUIRY_TO_EMAIL`: `subhan.mondal525@gmail.com`
-   - Optional Gmail sending: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER` (the Gmail address) and `SMTP_PASS` (a Gmail App password)
+   - `NEXT_PUBLIC_SITE_URL`: the live domain, for example `https://www.inspireworldgarments.com`
+   - `ENQUIRY_TO_EMAIL`: `info@inspireworldgarments.com`
+   - Optional SMTP sending: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` (info@inspireworldgarments.com) and `SMTP_PASS`, from the email provider
 4. Deploy, then connect the domain under **Settings → Domains**.
 5. Submit one test enquiry on the live site. If the Gmail variables are not set, click the **Activate Form** email from FormSubmit.
 
 Any Node host works too: `npm install && npm run build && npm start` (port 3000). The enquiry form needs a server (the `/api/enquiry` route), so a static-only host will not work.
 
-> Note for the developer: this project was written and tested as rendered React (all sections, the mobile menu, filters and form validation), but `next build` has not been run yet. Please run `npm install && npm run build` first and fix anything the TypeScript check flags.
+> Note for the developer: this version adds 7 pages. It passes `tsc --noEmit` against the installed Next.js 15.5 and React 19 types, and every page was rendered and checked (links, anchors, mobile layout, form). Run `npm install && npm run build` before deploying.
 
 ## Before going live
 
-1. **Enquiry emails.** Every quotation request is emailed to **subhan.mondal525@gmail.com** (change it with `ENQUIRY_TO_EMAIL` or `company.email` in `site.ts`). Replying to the email replies to the buyer. There are two ways it can be sent:
+1. **Enquiry emails.** Every quotation request is emailed to **info@inspireworldgarments.com** (change it with `ENQUIRY_TO_EMAIL` or `company.email` in `site.ts`). Replying to the email replies to the buyer. There are two ways it can be sent:
    - **FormSubmit (works with no setup).** After the site is live, send one test enquiry. FormSubmit emails an **"Activate Form"** link to the inbox. Click it once, and every enquiry after that is delivered.
-   - **Gmail SMTP (recommended).** In the Gmail account, turn on 2-Step Verification and create an App password. Put the Gmail address in `SMTP_USER` and the app password in `SMTP_PASS` (see `.env.example`). Emails are then sent from your own mailbox, with no third party involved.
+   - **SMTP (recommended).** Put the SMTP host, port, username (info@inspireworldgarments.com) and password from the email provider into `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` and `SMTP_PASS` (see `.env.example`). Emails are then sent from the company's own mailbox, with no third party involved.
 
    If sending ever fails, the form gives the visitor a pre-written WhatsApp message instead, so no enquiry is lost. The handler is in `src/app/api/enquiry/route.ts`.
 2. **Domain.** Set `NEXT_PUBLIC_SITE_URL`. It is used for SEO metadata, `sitemap.xml` and `robots.txt`.
-3. **Email.** The site currently shows a Gmail address. An address on the company domain (for example `info@inspireworld.ae`) reads as more credible to trade buyers. Change it in one place: `company.email` in `src/content/site.ts`.
-4. **Photos.** The images in `public/images/` are free Unsplash photos, cropped to 4:5 and colour-graded to one warm tone. When real product or warehouse photos are available, replace them. Keep the same file names, or update the `image` paths in `site.ts`.
-5. **Product examples.** Each product line lists typical items (for example "Abayas & modest wear" or "Hotel slippers"). Confirm these match what the company actually trades.
+3. **Email.** The site uses info@inspireworldgarments.com. Make sure this mailbox is set up and receiving mail before launch. For SMTP sending, use that mailbox's own SMTP settings (from the email host) instead of Gmail.
+4. **Photos.** The images in `public/images/` are free Unsplash photos, cropped and colour-graded to one warm tone. Close-up photos of the client's own stock (a school bag, a trolley bag and a gift set on a plain wall, for example) would be better. Keep the same file names, or update the `image` paths in `site.ts`.
+5. **Policies.** The Terms & Conditions, Privacy, Returns & Refunds and Delivery pages are written for B2B trade in Dubai. Business numbers (quotation validity, claim window, refund time) are set once in `policy` in `src/content/legal.ts`. **Have a UAE lawyer review these texts before launch.**
+6. **Licence match.** Each product card shows the licensed activity it falls under, so the site matches trade licence 1627014. Don't add products outside those nine activities (for example stationery) unless the activity is first added to the licence.
+
+## Pages
+
+| Page | Route | File |
+|---|---|---|
+| Home | `/` | `src/app/page.tsx` |
+| Products (all 9 lines, with filters) | `/products` | `src/app/products/page.tsx` |
+| About | `/about` | `src/app/about/page.tsx` |
+| Contact & quotation form | `/contact` | `src/app/contact/page.tsx` |
+| Terms & Conditions | `/terms` | content in `src/content/legal.ts` |
+| Privacy Policy | `/privacy` | content in `src/content/legal.ts` |
+| Returns & Refunds | `/returns` | content in `src/content/legal.ts` |
+| Delivery Policy | `/delivery` | content in `src/content/legal.ts` |
+
+Every "Request a quotation" button on a product links to `/contact?line=<id>#enquiry`, which pre-selects that product line in the form.
 
 ## Where to edit
 
 | What | File |
 |---|---|
-| Company name, address, phone, email | `src/content/site.ts` → `company` |
-| The 9 product lines (names, descriptions, examples, images) | `src/content/site.ts` → `lines` |
-| Hero, About, process steps, "Who we supply" copy | `src/content/site.ts` |
+| Company name, address, phone, email, licence number | `src/content/site.ts` → `company` |
+| The 9 product lines (licence name, headline, description, examples, image) | `src/content/site.ts` → `lines` |
+| Home, About, seasons, trade-terms summary, process copy | `src/content/site.ts` |
+| Policy pages and their business numbers | `src/content/legal.ts` |
 | Colours, fonts, spacing | `src/app/globals.css` (tokens at the top) |
-| SEO title, description, structured data | `src/app/layout.tsx` |
-| Section order | `src/app/page.tsx` |
-| Individual sections | `src/components/*.tsx` |
-
-Every component reads the name, address and product lines from `site.ts`. That keeps them identical across the product lines, About facts, contact cards, footer and structured data.
-
-## Sections and anchors
-
-- Product lines: `#lines`, with a card per line at `#line-<id>`
-- About: `#about`
-- How we work: `#process`
-- Who we supply: `#supply`
-- Request a quotation: `#enquiry`
-- Contact: `#contact`
+| SEO title, description, structured data | `src/app/layout.tsx` and each page's `metadata` |
+| Shared header, footer, mobile bar | `src/app/layout.tsx` |
 
 ## Built in
 
@@ -79,7 +84,9 @@ The photos are from Unsplash under the Unsplash License, which allows free comme
 - Textiles: `photo-1640746942093-cec8e647596d`
 - Shoes: `photo-1625357165350-bdbcb6d7d524`
 - Sandals: `photo-1613662632164-7f2b081a5b46`
-- Handbags: `photo-1691480150204-66dd1eb77391`
+- School bags: `photo-1726726192148-af52008ff663`
+- Backpack (home page): `photo-1765516833058-c322c800fee1`
+- Warehouse (About): `photo-1769355104335-acef3aa4c9b6`
 - Luggage: `photo-1670888616427-764112453941`
 - Gifts: `photo-1512418490979-92798cec1380`
 - Oud: `photo-1738414808975-201966230c59`

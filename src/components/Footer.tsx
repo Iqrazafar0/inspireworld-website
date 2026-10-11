@@ -1,4 +1,5 @@
-import { company, lines, nav, links, addressLine } from "@/content/site";
+import Link from "next/link";
+import { company, lines, nav, legalNav, links, addressLine } from "@/content/site";
 import { Logo } from "./Logo";
 
 export function Footer() {
@@ -10,14 +11,15 @@ export function Footer() {
           <div className="footer__brand">
             <Logo tone="light" />
             <p className="footer__legal">{company.legalName}</p>
+            <p>Wholesale supply of bags, luggage, gifts and garments to merchants in Dubai.</p>
           </div>
 
           <nav className="footer__col" aria-label="Product lines">
-            <h2>Product lines</h2>
+            <h2>Products</h2>
             <ul>
               {lines.map((l) => (
                 <li key={l.id}>
-                  <a href={`#line-${l.id}`}>{l.name}</a>
+                  <Link href={`/products#line-${l.id}`}>{l.name}</Link>
                 </li>
               ))}
             </ul>
@@ -28,12 +30,17 @@ export function Footer() {
             <ul>
               {nav.map((n) => (
                 <li key={n.href}>
-                  <a href={n.href}>{n.label}</a>
+                  <Link href={n.href}>{n.label}</Link>
                 </li>
               ))}
-              <li>
-                <a href="#enquiry">Request a quotation</a>
-              </li>
+            </ul>
+            <h2 className="footer__sub">Policies</h2>
+            <ul>
+              {legalNav.map((n) => (
+                <li key={n.href}>
+                  <Link href={n.href}>{n.label}</Link>
+                </li>
+              ))}
             </ul>
           </nav>
 
@@ -59,7 +66,7 @@ export function Footer() {
 
         <div className="footer__bottom">
           <p>
-            © {year} {company.legalName}
+            © {year} {company.legalName}. All rights reserved.
           </p>
           <p>{addressLine}</p>
         </div>

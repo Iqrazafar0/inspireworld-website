@@ -1,18 +1,14 @@
-import { process, enquiryHref } from "@/content/site";
+import { process } from "@/content/site";
 import { SectionHead } from "./SectionHead";
-import { Icon } from "./Icon";
 
 export function Process() {
   return (
-    <section id="process" className="section process" aria-labelledby="process-title">
+    <section className="section process" aria-labelledby="process-title">
       <div className="container">
         <SectionHead
           id="process-title"
-          index="03"
-          eyebrow="How we work"
-          tone="light"
-          title="From first message to handover, in four steps."
-          intro="One contact handles your order across every line, so a mixed order of garments, footwear and oud is quoted, invoiced and packed together."
+          eyebrow="How an order works"
+          title="From first message to signed delivery note."
         />
         <ol className="process__list">
           {process.map((step, i) => (
@@ -23,11 +19,6 @@ export function Process() {
             </li>
           ))}
         </ol>
-        <div className="process__cta reveal">
-          <a href={enquiryHref} className="btn btn--light">
-            Start with step one <Icon name="arrow" size={18} />
-          </a>
-        </div>
       </div>
     </section>
   );

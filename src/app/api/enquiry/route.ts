@@ -60,7 +60,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Missing or invalid fields", missing }, { status: 422 });
   }
 
-  const lineName = lines.find((l) => l.id === clean.line)?.name ?? "Several lines";
+  const found = lines.find((l) => l.id === clean.line);
+  const lineName = found ? `${found.headline} (${found.name})` : "Several product lines";
   const fields: Record<string, string> = { ...clean, lineName };
   const order = ["name", "company", "email", "phone", "lineName", "quantity", "destination", "message"];
   const rows = order.filter((k) => fields[k]).map((k) => [LABELS[k], fields[k]] as const);
